@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import bodyParser from "body-parser";
 import cors from "cors";
+import controllers from "/controllers/controllers.js";
 
 const app = express();
 const PORT = 5000;
@@ -29,13 +30,13 @@ const verifyToken = (req, res, next) => {
 // Routes
 app.post("/signin", async (req, res) => {
   const { email, password } = req.body;
-  // const user = users.find((u) => u.email === email);
-  // if (!user) return res.status(404).json({ message: "User not found" });
+  const user = users.find((u) => u.email === email);
+  if (!user) return res.status(404).json({ message: "User not found" });
 
-  // const isPasswordValid = await bcrypt.compare(password, user.password);
-  // if (!isPasswordValid) return res.status(400).json({ message: "Invalid credentials" });
-  const isPasswordValid = true;
-  const user = { id: 1, email };
+  const isPasswordValid = await bcrypt.compare(password, user.password);
+  if (!isPasswordValid) return res.status(400).json({ message: "Invalid credentials" });
+  // const isPasswordValid = true;
+  // const user = { id: 1, email };
 
   const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: "1h" });
   res.status(200).json({ token });
