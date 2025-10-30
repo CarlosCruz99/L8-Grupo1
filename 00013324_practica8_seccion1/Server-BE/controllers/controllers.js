@@ -1,4 +1,4 @@
-import pool from "../data/db/connection.js";
+import { pool } from "../data/db/connection.js";
 
 const getUsers = (request, response) => {
     pool.query('SELECT * FROM users ORDER BY id ASC', (error, results) => {

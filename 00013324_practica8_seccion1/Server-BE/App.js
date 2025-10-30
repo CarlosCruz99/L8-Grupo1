@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 import bodyParser from "body-parser";
 import cors from "cors";
 import controllers from "./controllers/controllers.js";
-import pool from "./data/db/connection.js";
+import { pool } from "./data/db/connection.js";
 
 const app = express();
 const PORT = 5000;
@@ -36,7 +36,7 @@ app.put('/users/:id', controllers.updateUser)
 app.delete('/users/:id', controllers.deleteUser)
 
 
-app.post("/signin", async (req, res) => {
+app.post("/signIn", async (req, res) => {
   const { email, password } = req.body;
   const user = users.find((u) => u.email === email);
   if (!user) return res.status(404).json({ message: "User not found" });
