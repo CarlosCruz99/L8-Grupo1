@@ -3,7 +3,8 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import bodyParser from "body-parser";
 import cors from "cors";
-import controllers from "/controllers/controllers.js";
+import controllers from "./controllers/controllers.js";
+import pool from "./data/db/connection.js";
 
 const app = express();
 const PORT = 5000;
@@ -12,7 +13,7 @@ const JWT_SECRET = "your_jwt_secret"; // Use a strong, secure key in production
 app.use(bodyParser.json());
 app.use(cors());
 
-const users = []; // Dummy database (use a real DB in production)
+const users = pool; // Dummy database (use a real DB in production)
 
 // Middleware: Verify Token
 const verifyToken = (req, res, next) => {
@@ -28,6 +29,13 @@ const verifyToken = (req, res, next) => {
 };
 
 // Routes
+app.get('/users', controllers.getUsers)
+app.get('/users/:id', controllers.getUserById)
+app.post('/users', controllers.createUser)
+app.put('/users/:id', controllers.updateUser)
+app.delete('/users/:id', controllers.deleteUser)
+
+
 app.post("/signin", async (req, res) => {
   const { email, password } = req.body;
   const user = users.find((u) => u.email === email);
